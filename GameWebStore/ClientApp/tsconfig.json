@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es5",
+    "jsx": "react",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
