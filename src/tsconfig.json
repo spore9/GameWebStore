@@ -8,6 +8,8 @@
     "moduleResolution": "node"
   },
   "include": [
-    "./src/**/*"
+    "Feature/*/client/**/*",
+    "Foundation/*/client/**/*",
+    "Project/*/client/**/*"
   ]
 }
