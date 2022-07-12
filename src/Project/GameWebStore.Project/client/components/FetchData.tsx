@@ -1,5 +1,6 @@
+import { getAccessToken } from 'Foundation/Security/client/Integration/selectors';
 import * as React from 'react';
-import authService from './api-authorization/AuthorizeService'
+import { useSelector } from 'react-redux';
 import { FetchDataProps, FetchDataState } from './models';
 
 export class FetchData extends React.Component<FetchDataProps, FetchDataState> {
@@ -54,7 +55,7 @@ export class FetchData extends React.Component<FetchDataProps, FetchDataState> {
   }
 
   async populateWeatherData() {
-    const token = await authService.getAccessToken();
+    const token = useSelector(getAccessToken);
     const response = await fetch('weatherforecast', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     });
