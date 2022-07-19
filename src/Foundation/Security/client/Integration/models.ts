@@ -9,8 +9,14 @@ export interface userManagerProps {
 export interface SecurityGlobalState {
     user: User;
     isAuthenticated: boolean;
-    loginMessage: string;
-    logoutMessage: string;
+    login: LoginState;
+    logout: LogoutState;
+}
+export interface LoginState {
+    message: string;
+}
+export interface LogoutState {
+    message: string;
     isReady: boolean;
 }
 export interface LoggedUser {

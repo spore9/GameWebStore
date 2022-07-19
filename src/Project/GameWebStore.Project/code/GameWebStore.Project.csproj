@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,9 +11,16 @@
     <SpaProxyServerUrl>https://localhost:44436</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c74dfd2b-847c-47aa-8b32-769f2555426b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="GraphQL" Version="5.3.2" />
+	<PackageReference Include="GraphQL.MemoryCache" Version="5.3.2" />
+	<PackageReference Include="GraphQL.MicrosoftDI" Version="5.3.2" />
+	<PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="6.1.0" />
+	<PackageReference Include="GraphQL.Server.Ui.Playground" Version="6.1.0" />
+	<PackageReference Include="GraphQL.SystemTextJson" Version="5.3.2" />
 	<PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.6" />
 	<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
@@ -22,9 +29,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Feature\Account\code\GameWebStore.Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Foundation\DatabaseFramework\code\GameWebStore.Foundation.DatabaseFramework.csproj" />
+    <ProjectReference Include="..\..\..\Foundation\Security\code\GameWebStore.Foundation.Security.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

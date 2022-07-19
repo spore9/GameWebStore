@@ -1,5 +1,6 @@
 ﻿namespace GameWebStore.Foundation.Security.Services
 {
+    using GameWebStore.Foundation.Security.JsModels;
     using GameWebStore.Foundation.Security.Models;
     public interface IUserService
     {

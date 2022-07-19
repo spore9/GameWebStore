@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Project", "Project\GameWebStore.Project\code\GameWebStore.Project.csproj", "{C59A490E-EC60-4EF2-ACF9-21A90241C6D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36} = {B248EE21-F021-4B79-8C15-F8F2E8CA1A36}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{587FCA5E-1009-45C6-B443-D9FC13F1BE26}"
 EndProject
