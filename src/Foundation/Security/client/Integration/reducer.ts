@@ -4,9 +4,13 @@ import { SecurityGlobalState } from "./models";
 export const securityInitialState: SecurityGlobalState = {
     user: null,
     isAuthenticated: false,
-    isReady: false,
-    loginMessage: '',
-    logoutMessage: '',
+    login: {
+        message: '',
+    },
+    logout: {
+        message: '',
+        isReady: false,
+    },
 };
 
 export const securityReducer = (state: SecurityGlobalState = securityInitialState, action: any) => {
@@ -19,7 +23,9 @@ export const securityReducer = (state: SecurityGlobalState = securityInitialStat
                 ...state,
                 isAuthenticated,
                 user,
-                loginMessage: message,
+                login: {
+                    message,
+                }
             };
         }
 
@@ -28,23 +34,29 @@ export const securityReducer = (state: SecurityGlobalState = securityInitialStat
 
             return {
                 ...state,
-                logoutMessage: message,
-                isReady: true,
+                logout: {
+                    message,
+                    isReady: true,    
+                }
             };
         }
 
         case actionTypes.SIGN_OUT.begin: {
             return {
                 ...state,
-                logoutMessage: null,
-                isReady: false,
+                logout: {
+                    message: null,
+                    isReady: false,    
+                }
             };
         }
 
         case actionTypes.SIGN_IN.begin: {
             return {
                 ...state,
-                loginMessage: null,
+                login: {
+                    message: null,
+                }
             };
         }
 

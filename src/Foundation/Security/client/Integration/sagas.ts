@@ -4,16 +4,17 @@ import { call, put, takeEvery } from 'redux-saga/effects'
 import * as UserUtils from "../utils";
 import { actionTypes } from "./actionTypes";
 import * as actions from "./actions";
-import { ApplicationName, ApplicationPaths } from "./ApiAuthorizationConstants";
+import * as api from "./api";
+import { ApplicationName } from "./ApiAuthorizationConstants";
+import { AuthConfigurationInputModel } from "../GeneratedModels/auth-configuration-input-model";
 
 export function* ensureUserManagerInitialized(): SagaIterator {
     let userManager = UserUtils.UserManagerFactory.userManager;
     if (userManager !== undefined) {
         return userManager;
     }
-    const apiUrl = `${window.location.protocol}//${window.location.hostname}:${ApplicationPaths.ApiPort}/${ApplicationPaths.ApiAuthorizationClientConfigurationUrl}`;
-
-    let response = yield call(fetch, apiUrl);
+    const authParameters: AuthConfigurationInputModel = { clientId: "1" }
+    let response = yield call(api.requestAlipayRedirectData, authParameters);
     if (!response.ok) {
         throw new Error(`Could not load settings for '${ApplicationName}'`);
     }

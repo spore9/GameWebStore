@@ -7,16 +7,21 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './Root/store';
+import { ApolloProvider } from '@apollo/client';
+import { GraphQLFactory } from 'Foundation/Integration/client/GraphQL';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
+const graphQL = GraphQLFactory(true);
 
 ReactDOM.render(
-<Provider store={store}>
-  <BrowserRouter basename={baseUrl}>
-    <App />
-  </BrowserRouter>
-</Provider>,
+  <Provider store={store}>
+    <ApolloProvider client={graphQL}>
+      <BrowserRouter basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>
+  </Provider>,
   rootElement);
 
 // If you want your app to work offline and load faster, you can change

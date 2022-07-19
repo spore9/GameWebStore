@@ -27,6 +27,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
+dist/
 [Bb]in/
 [Oo]bj/
 [Oo]ut/
@@ -364,3 +365,14 @@ FodyWeavers.xsd
 
 # Connection String
 src/Project/GameWebStore.Project/code/connectionString.config
+
+#Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
