@@ -7,18 +7,20 @@ import * as actions from "./actions";
 import * as api from "./api";
 import { ApplicationName } from "./ApiAuthorizationConstants";
 import { AuthConfigurationInputModel } from "../GeneratedModels/auth-configuration-input-model";
+import { NetworkStatus } from "@apollo/client";
 
 export function* ensureUserManagerInitialized(): SagaIterator {
     let userManager = UserUtils.UserManagerFactory.userManager;
     if (userManager !== undefined) {
         return userManager;
     }
-    const authParameters: AuthConfigurationInputModel = { clientId: "1" }
-    let response = yield call(api.requestAlipayRedirectData, authParameters);
-    if (!response.ok) {
+    const authParameters: AuthConfigurationInputModel = { clientId: ApplicationName };
+
+    const response = yield call(api.requestAlipayRedirectData, authParameters);
+    if (response.networkStatus !== NetworkStatus.ready && !!response.data?.configuration) {
         throw new Error(`Could not load settings for '${ApplicationName}'`);
     }
-    let settings = yield call(response.json.bind(response));
+    let settings = response.data.configuration;
     settings.automaticSilentRenew = true;
     settings.includeIdTokenInSilentRenew = true;
     settings.userStore = new WebStorageStateStore({
@@ -36,14 +38,14 @@ export function* signIn(): SagaIterator {
     const userManager: UserManager = yield call(ensureUserManagerInitialized);
     try {
         yield put(actions.SignInRequest());
-        const silentUser = yield call(userManager.signinSilent, UserUtils.createArguments(null));
+        const silentUser = yield call([userManager, userManager.signinSilent], UserUtils.createArguments(null));
         yield put(actions.SignInSuccess(silentUser));
     } catch (silentError) {
         // User might not be authenticated, fallback to popup authentication
         console.log("Silent authentication error: ", silentError);
 
         try {
-            const popUpUser = yield call(userManager.signinPopup, UserUtils.createArguments(null));
+            const popUpUser = yield call([userManager, userManager.signinPopup], UserUtils.createArguments(null));
             yield put(actions.SignInSuccess(popUpUser));
         } catch (popUpError) {
             if (popUpError.message === "Popup window closed") {
@@ -55,10 +57,10 @@ export function* signIn(): SagaIterator {
 
             // PopUps might be blocked by the user, fallback to redirect
             try {
-                yield call(userManager.signinRedirect, UserUtils.createArguments(null));
+                yield call([userManager, userManager.signinRedirect], UserUtils.createArguments(null));
             } catch (redirectError) {
                 console.log("Redirect authentication error: ", redirectError);
-                yield put(actions.SignInFailure(redirectError));
+                yield put(actions.SignInFailure("Failed to signin"));
             }
         }
     }
@@ -67,7 +69,7 @@ export function* completeSignIn(url): SagaIterator {
     try {
         const userManager: UserManager = yield call(ensureUserManagerInitialized);
 
-        const user = yield call(userManager.signinCallback,url);
+        const user = yield call([userManager, userManager.signinCallback], url);
         yield put(actions.SignInSuccess(user));
     } catch (error) {
         console.log('There was an error signing in: ', error);
@@ -95,7 +97,7 @@ export function* signOut(): SagaIterator {
 export function* completeSignOut(url): SagaIterator {
     const userManager: UserManager = yield call(ensureUserManagerInitialized);
     try {
-        yield call(userManager.signoutCallback,url);
+        yield call(userManager.signoutCallback, url);
         yield put(actions.SignOutSuccess());
     } catch (error) {
         console.log(`There was an error trying to log out '${error}'.`);

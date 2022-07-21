@@ -363,9 +363,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Connection String
-src/Project/GameWebStore.Project/code/connectionString.config
-
 #Misc
 .DS_Store
 .env.local

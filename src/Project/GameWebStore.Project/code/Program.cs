@@ -1,7 +1,10 @@
 using GameWebStore.Feature.Account.Graph.Schemas;
 using GameWebStore.Foundation.DatabaseFramework;
 using GameWebStore.Foundation.DatabaseFramework.Models;
+using GameWebStore.Foundation.Framework.Providers;
+using GameWebStore.Foundation.Security;
 using GameWebStore.Foundation.Security.Models;
+using GameWebStore.Project.Settings;
 using GraphQL;
 using GraphQL.Caching;
 using GraphQL.MicrosoftDI;
@@ -14,7 +17,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var gameWebStoreConfig =
+    builder.Configuration.GetSection("GameWebStore").Get<GameWebStoreSettings>();
+var connectionString = gameWebStoreConfig.ConnectionString;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -23,30 +28,33 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddCors();
 
-builder.Services.AddGraphQL(b => b
-                .AddHttpMiddleware<ISchema>()
-                .AddUserContextBuilder(httpContext => new GraphQLUserContext { User = httpContext.User })
-                .AddAutomaticPersistedQueries()
-                .AddSystemTextJson()
-                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-                .AddSchema<AuthConfigurationSchema>()
-                .AddGraphTypes(typeof(AuthConfigurationSchema).Assembly));
-
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
+builder.Services.AddGraphQL(b => b
+                .AddHttpMiddleware<ISchema>()
+                .AddUserContextBuilder(httpContext => new GraphQLUserContext { User = httpContext.User })
+                .AddAutomaticPersistedQueries()
+                .AddSystemTextJson()
+                .AddErrorInfoProvider<CustomErrorInfoProvider>()
+                .AddSchema<AuthConfigurationSchema>()
+                .AddGraphTypes(typeof(AuthConfigurationSchema).Assembly));
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddProjectSecurityServices();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
 }
 else
@@ -58,15 +66,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors(builder => builder.WithOrigins("https://localhost:44436")
-                            .AllowAnyMethod()
-                            .WithHeaders("accept", "content-type", "origin", "custom-header").AllowCredentials());
+app.UseCors(builder => 
+    builder.WithOrigins("https://localhost:44436")
+           .AllowAnyMethod()
+           .WithHeaders("accept", "content-type", "origin", "custom-header")
+           .AllowCredentials());
 
-app.UseGraphQL<ISchema>();
-app.UseGraphQLPlayground();
 app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
+
+app.UseGraphQL<ISchema>();
+app.UseGraphQLPlayground();
 
 app.MapGraphQL<ISchema>();
 app.MapControllerRoute(
