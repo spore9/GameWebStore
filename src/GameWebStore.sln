@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Project", "Project\GameWebStore.Project\code\GameWebStore.Project.csproj", "{C59A490E-EC60-4EF2-ACF9-21A90241C6D7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36} = {B248EE21-F021-4B79-8C15-F8F2E8CA1A36}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{587FCA5E-1009-45C6-B443-D9FC13F1BE26}"
 EndProject
@@ -22,11 +19,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{9C54
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Account", "Account", "{D16ECA78-DB23-4641-8FF9-309F2A9CCC55}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Feature.Account", "Feature\Account\code\GameWebStore.Feature.Account.csproj", "{B248EE21-F021-4B79-8C15-F8F2E8CA1A36}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseFramework", "DatabaseFramework", "{CD8A3CC3-1BBF-4CC4-A060-452205E57670}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Foundation.DatabaseFramework", "Foundation\DatabaseFramework\code\GameWebStore.Foundation.DatabaseFramework.csproj", "{68DC1370-42A2-4BC3-8746-E03727492633}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{B65343E7-2B19-47E5-8FB1-0C64A4DB7E10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Foundation.Framework", "Foundation\Framework\code\GameWebStore.Foundation.Framework.csproj", "{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameWebStore.Feature.Account", "Feature\Account\code\GameWebStore.Feature.Account.csproj", "{C270290D-E8B2-4CB9-8515-54088E484893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,14 +43,18 @@ Global
 		{83E22E4F-9293-49B1-A028-5B8F42C792EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83E22E4F-9293-49B1-A028-5B8F42C792EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83E22E4F-9293-49B1-A028-5B8F42C792EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68DC1370-42A2-4BC3-8746-E03727492633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68DC1370-42A2-4BC3-8746-E03727492633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68DC1370-42A2-4BC3-8746-E03727492633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68DC1370-42A2-4BC3-8746-E03727492633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C270290D-E8B2-4CB9-8515-54088E484893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C270290D-E8B2-4CB9-8515-54088E484893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C270290D-E8B2-4CB9-8515-54088E484893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C270290D-E8B2-4CB9-8515-54088E484893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,9 +65,11 @@ Global
 		{F8867F2D-7FCD-4B56-9DD9-4F870D7D14D1} = {409A3DF0-1430-4F1D-BB32-432B9F8EF6D7}
 		{83E22E4F-9293-49B1-A028-5B8F42C792EB} = {F8867F2D-7FCD-4B56-9DD9-4F870D7D14D1}
 		{D16ECA78-DB23-4641-8FF9-309F2A9CCC55} = {9C54C313-63D3-4CF3-871B-4C36A3058E6D}
-		{B248EE21-F021-4B79-8C15-F8F2E8CA1A36} = {D16ECA78-DB23-4641-8FF9-309F2A9CCC55}
 		{CD8A3CC3-1BBF-4CC4-A060-452205E57670} = {409A3DF0-1430-4F1D-BB32-432B9F8EF6D7}
 		{68DC1370-42A2-4BC3-8746-E03727492633} = {CD8A3CC3-1BBF-4CC4-A060-452205E57670}
+		{B65343E7-2B19-47E5-8FB1-0C64A4DB7E10} = {409A3DF0-1430-4F1D-BB32-432B9F8EF6D7}
+		{6EBF9EE2-8167-46EE-8F29-0C8DDC51EC9B} = {B65343E7-2B19-47E5-8FB1-0C64A4DB7E10}
+		{C270290D-E8B2-4CB9-8515-54088E484893} = {D16ECA78-DB23-4641-8FF9-309F2A9CCC55}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E779AC8-CA3E-4B04-B6CF-A85DD4A39B4A}

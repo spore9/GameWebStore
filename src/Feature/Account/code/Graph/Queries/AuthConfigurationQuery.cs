@@ -3,6 +3,7 @@
     using GameWebStore.Feature.Account.Graph.GraphInputTypes;
     using GameWebStore.Feature.Account.Graph.GraphTypes;
     using GameWebStore.Foundation.Security.JsModels;
+    using GameWebStore.Foundation.Security.Mappers;
     using GraphQL;
     using GraphQL.Types;
     using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
@@ -10,7 +11,7 @@
 
     internal class AuthConfigurationQuery : ObjectGraphType
     {
-        public AuthConfigurationQuery(IClientRequestParametersProvider clientRequestParametersProvider, IHttpContextAccessor httpContextAccessor)
+        public AuthConfigurationQuery(IClientRequestParametersProvider clientRequestParametersProvider, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
 
             Field<AuthConfigurationGraphType>("configuration", arguments: new QueryArguments(
@@ -19,8 +20,8 @@
             {
                 var authParameters = context.GetArgument<AuthConfigurationInputModel>("authParameters");
                 var parameters = clientRequestParametersProvider.GetClientParameters(httpContextAccessor.HttpContext, authParameters.ClientId);
- 
-                return parameters;
+                var result = mapper.Map(parameters);
+                return result;
             });
         }
     }
