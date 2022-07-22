@@ -20,7 +20,7 @@ export function* ensureUserManagerInitialized(): SagaIterator {
     if (response.networkStatus !== NetworkStatus.ready && !!response.data?.configuration) {
         throw new Error(`Could not load settings for '${ApplicationName}'`);
     }
-    let settings = response.data.configuration;
+    const settings = response.data.configuration;
     settings.automaticSilentRenew = true;
     settings.includeIdTokenInSilentRenew = true;
     settings.userStore = new WebStorageStateStore({

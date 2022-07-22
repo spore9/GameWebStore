@@ -9,7 +9,7 @@ import { LogoutProps } from './models';
 export const Logout: React.FC<LogoutProps> = ({actionName}) => {
     const dispatch = useDispatch();
 
-    let message = useSelector(getLogoutMessage);
+    const message = useSelector(getLogoutMessage);
     const isReady = useSelector(getIsLogoutReady);
     const isAuthenticated = useSelector(getIsAuthenticated);
 

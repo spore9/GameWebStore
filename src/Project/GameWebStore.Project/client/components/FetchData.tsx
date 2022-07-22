@@ -41,7 +41,7 @@ export class FetchData extends React.Component<FetchDataProps, FetchDataState> {
   }
 
   render() {
-    let contents = this.state.loading
+    const contents = this.state.loading
       ? <p><em>Loading...</em></p>
       : FetchData.renderForecastsTable(this.state.forecasts);
 

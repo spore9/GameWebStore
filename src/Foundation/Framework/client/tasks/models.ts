@@ -6,7 +6,7 @@ export interface TaskActionTypes {
     failure: string;
     success: string;
   }
-  export interface TaskPayload<TModel = {}> {
+  export interface TaskPayload<TModel = Record<string, unknown>> {
     data?: TModel;
     error?: any;
     originAction: string;

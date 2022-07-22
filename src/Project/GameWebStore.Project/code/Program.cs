@@ -26,7 +26,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddCors();
 
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
@@ -65,12 +64,6 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseCors(builder => 
-    builder.WithOrigins("https://localhost:44436")
-           .AllowAnyMethod()
-           .WithHeaders("accept", "content-type", "origin", "custom-header")
-           .AllowCredentials());
 
 app.UseAuthentication();
 app.UseIdentityServer();
