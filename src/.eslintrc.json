@@ -2,17 +2,9 @@
     "env": {
         "es6": true
     },
-    "ordered-imports": {
-        "options": {
-            "import-sources-order": "case-insensitive",
-    "named-imports-order": "case-insensitive",
-            "grouped-imports": true,
-            "groups": [
-      { "name": "Project paths", "match": "(Feature\/|Foundation\/|Project\/)", "order": 20 },
-      { "name": "Libs", "match": "^@?[a-zA-Z]", "order": 10 },
-                { "name": "Parent directories", "match": "^\\.\/.", "order": 30 },
-      { "name": "Current directory", "match": "^..\/", "order": 30 }
-            ]
-        }
-    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": ["plugin:@typescript-eslint/recommended"]
 }

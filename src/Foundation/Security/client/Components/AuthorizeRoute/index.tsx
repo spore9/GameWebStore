@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ApplicationPaths, QueryParameterNames } from '../../Integration/ApiAuthorizationConstants';
 import { AuthorizeRouteProps } from './models';
-import { Route, Redirect } from 'react-router-dom'
+import { Navigate, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from '../../Integration/selectors';
 
@@ -19,14 +19,7 @@ export const AuthorizeRoute: React.FC<AuthorizeRouteProps> = ({path, component, 
 
     if (!isready) {
         return <div></div>;
-    } else {
-        return <Route {...rest}
-            render={(props) => {
-                if (authenticated) {
-                    return <React.Component {...props} />
-                } else {
-                    return <Redirect to={redirectUrl} />
-                }
-            }} />
-    }
+      } else {
+        return authenticated ? component : <Navigate replace to={redirectUrl} />;
+      }
 }

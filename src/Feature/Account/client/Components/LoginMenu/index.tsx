@@ -16,7 +16,8 @@ export const LoginMenu: React.FC<LoginMenuProps> = () => {
     const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
 
     return (<>
-        {isAuthenticated ? <><NavItem>
+        {isAuthenticated ? <>
+        <NavItem>
             <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
         </NavItem>
             <NavItem>

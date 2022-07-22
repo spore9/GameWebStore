@@ -6,7 +6,7 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 export function GraphQLFactory(ssr: boolean) {
   const link = createPersistedQueryLink({ sha256 }).concat(
     new BatchHttpLink({
-      uri: 'https://localhost:7110/graphql',
+      uri: 'https://localhost:44436/graphql',
       credentials: 'include',
       headers: {
         connection: 'keep-alive',

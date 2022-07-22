@@ -1,4 +1,5 @@
 export interface AuthorizeRouteProps {
-    path: string;
-    component: any;
+    path?: string;
+    component: React.ReactElement;
+
 }
