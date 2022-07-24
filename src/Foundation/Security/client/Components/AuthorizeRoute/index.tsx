@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ApplicationPaths, QueryParameterNames } from '../../Integration/ApiAuthorizationConstants';
 import { AuthorizeRouteProps } from './models';
-import { Navigate, Route } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from '../../Integration/selectors';
 

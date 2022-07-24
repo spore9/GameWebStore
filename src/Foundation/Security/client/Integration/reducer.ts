@@ -1,9 +1,7 @@
 import { actionTypes } from "./actionTypes";
-import { SecurityGlobalState } from "./models";
+import { SecurityComponentsState } from "./models";
 
-export const securityInitialState: SecurityGlobalState = {
-    user: null,
-    isAuthenticated: false,
+export const securityInitialState: SecurityComponentsState = {
     login: {
         message: '',
     },
@@ -13,16 +11,13 @@ export const securityInitialState: SecurityGlobalState = {
     },
 };
 
-export const securityReducer = (state: SecurityGlobalState = securityInitialState, action: any) => {
+export const securityReducer = (state: SecurityComponentsState = securityInitialState, action: any) => {
     switch (action.type) {
         case actionTypes.SIGN_IN.success: {
-            const { user, message } = action.payload;
-            const isAuthenticated = !!user;
+            const { message } = action.payload?.data;
 
             return {
                 ...state,
-                isAuthenticated,
-                user,
                 login: {
                     message,
                 }
@@ -36,7 +31,7 @@ export const securityReducer = (state: SecurityGlobalState = securityInitialStat
                 ...state,
                 logout: {
                     message,
-                    isReady: true,    
+                    isReady: true,
                 }
             };
         }
@@ -46,7 +41,7 @@ export const securityReducer = (state: SecurityGlobalState = securityInitialStat
                 ...state,
                 logout: {
                     message: null,
-                    isReady: false,    
+                    isReady: false,
                 }
             };
         }

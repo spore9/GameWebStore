@@ -13,7 +13,7 @@
     "paths": {
       "Foundation": ["Foundation"],
       "Project": ["Project"],
-      "Feature": ["Feature"],
+      "Feature": ["Feature"]
     },
     "sourceMap": true,
     "moduleResolution": "node"
@@ -22,5 +22,8 @@
     "Feature/*/client/**/*",
     "Foundation/*/client/**/*",
     "Project/*/client/**/*"
+  ],
+  "exclude": [
+    "Project/GameWebStore.Project/client/setupProxy.js",
   ]
 }

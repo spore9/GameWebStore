@@ -1,14 +1,20 @@
 import { getIsAuthenticated, getUserName } from 'Foundation/Security/client/Integration/selectors';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavItem, NavLink } from 'reactstrap';
 import { LoginMenuProps } from './models';
 import { Link } from 'react-router-dom';
 import { ApplicationPaths } from 'Foundation/Security/client/Integration/ApiAuthorizationConstants';
+import { InitUserManager } from 'Foundation/Security/client/Integration/actions';
 
 export const LoginMenu: React.FC<LoginMenuProps> = () => {
-    const isAuthenticated = useSelector(getIsAuthenticated);
     const userName = useSelector(getUserName);
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    React.useEffect(() => {
+        dispatch(InitUserManager());
+    },[]);
 
     const registerPath = `${ApplicationPaths.Register}`;
     const loginPath = `${ApplicationPaths.Login}`;

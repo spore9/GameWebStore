@@ -1,14 +1,10 @@
-import { User } from "oidc-client";
+import { UserState } from "redux-oidc";
 
-export interface AuthorizeServiceProps {
-    userManager: userManagerProps;
-}
-export interface userManagerProps {
-    getUser: any;
-}
 export interface SecurityGlobalState {
-    user: User;
-    isAuthenticated: boolean;
+    securityComponents: SecurityComponentsState;
+    security: UserState;
+}
+export interface SecurityComponentsState {
     login: LoginState;
     logout: LogoutState;
 }
@@ -18,9 +14,6 @@ export interface LoginState {
 export interface LogoutState {
     message: string;
     isReady: boolean;
-}
-export interface LoggedUser {
-    user: string;
 }
 export interface CompelteSignInOut {
     url: string;

@@ -1,12 +1,11 @@
-import { CompleteSignIn, SignIn } from 'Foundation/Security/client/Integration/actions';
+import { SignInCallback, SignIn } from 'Foundation/Security/client/Integration/actions';
 import { ApplicationPaths, LoginActions, QueryParameterNames } from 'Foundation/Security/client/Integration/ApiAuthorizationConstants';
 import { getLoginMessage } from 'Foundation/Security/client/Integration/selectors';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { LoginProps } from './models';
 
-export const Login: React.FC<LoginProps> = ({actionName}) => {
+export const Login: React.FC<LoginProps> = ({ actionName }) => {
     const dispatch = useDispatch();
     const message = useSelector(getLoginMessage);
     let redirectUrl = '';
@@ -18,22 +17,22 @@ export const Login: React.FC<LoginProps> = ({actionName}) => {
                 break;
             case LoginActions.LoginCallback:
                 const url = window.location.href;
-                dispatch(CompleteSignIn({url}));
+                dispatch(SignInCallback({ url }));
                 break;
             case LoginActions.Profile:
-                redirectUrl = `${window.location.origin}/${ApplicationPaths.IdentityRegisterPath}?${QueryParameterNames.ReturnUrl}=${encodeURI(ApplicationPaths.Login)}`;
+                redirectUrl = `${window.location.origin}/${ApplicationPaths.IdentityManagePath}`;
                 // TODO: implement change route
                 window.location.replace(redirectUrl);
                 break;
             case LoginActions.Register:
-                redirectUrl = `${window.location.origin}/${ApplicationPaths.IdentityManagePath}`;
+                redirectUrl = `${window.location.origin}/${ApplicationPaths.IdentityRegisterPath}?${QueryParameterNames.ReturnUrl}=${encodeURI(ApplicationPaths.Login)}`;
                 // TODO: implement change route
                 window.location.replace(redirectUrl);
                 break;
             default:
                 throw new Error(`Invalid action '${actionName}'`);
         }
-      }, [actionName]);
+    }, [actionName]);
 
     if (!!message) {
         return <div>{message}</div>
