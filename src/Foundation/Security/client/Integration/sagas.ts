@@ -1,13 +1,15 @@
 import { UserManager, WebStorageStateStore } from "oidc-client";
 import { SagaIterator } from "redux-saga";
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 import * as UserUtils from "../utils";
 import { actionTypes } from "./actionTypes";
 import * as actions from "./actions";
 import * as api from "./api";
-import { ApplicationName } from "./ApiAuthorizationConstants";
+import { ApplicationName, QueryParameterNames } from "./ApiAuthorizationConstants";
 import { AuthConfigurationInputModel } from "../GeneratedModels/auth-configuration-input-model";
 import { NetworkStatus } from "@apollo/client";
+import { loadUser } from "redux-oidc";
+import store from "Project/GameWebStore.Project/client/Root/store";
 
 export function* ensureUserManagerInitialized(): SagaIterator {
     let userManager = UserUtils.UserManagerFactory.userManager;
@@ -34,19 +36,24 @@ export function* ensureUserManagerInitialized(): SagaIterator {
     return userManager;
 }
 
+export function* initUserManager():SagaIterator {
+    const userManager: UserManager = yield call(ensureUserManagerInitialized);
+    loadUser(store, userManager);
+}
+
 export function* signIn(): SagaIterator {
     const userManager: UserManager = yield call(ensureUserManagerInitialized);
     try {
         yield put(actions.SignInRequest());
         const silentUser = yield call([userManager, userManager.signinSilent], UserUtils.createArguments(null));
-        yield put(actions.SignInSuccess(silentUser));
+        yield put(actions.SignInSuccess());
     } catch (silentError) {
         // User might not be authenticated, fallback to popup authentication
         console.log("Silent authentication error: ", silentError);
 
         try {
             const popUpUser = yield call([userManager, userManager.signinPopup], UserUtils.createArguments(null));
-            yield put(actions.SignInSuccess(popUpUser));
+            yield put(actions.SignInSuccess());
         } catch (popUpError) {
             if (popUpError.message === "Popup window closed") {
                 // The user explicitly cancelled the login action by closing an opened popup.
@@ -65,15 +72,29 @@ export function* signIn(): SagaIterator {
         }
     }
 }
-export function* completeSignIn(url): SagaIterator {
+export function* completeSignIn(action): SagaIterator {
+    const {url} = action?.payload;
     try {
         const userManager: UserManager = yield call(ensureUserManagerInitialized);
 
-        const user = yield call([userManager, userManager.signinCallback], url);
-        yield put(actions.SignInSuccess(user));
+        yield call([userManager, userManager.signinCallback], url);
     } catch (error) {
         console.log('There was an error signing in: ', error);
         yield put(actions.SignInFailure('There was an error signing in.'));
+    }
+}
+
+export function* redirectToUrlFromQuery(): SagaIterator {
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = params.get(QueryParameterNames.ReturnUrl);
+    if (fromQuery && !fromQuery.startsWith(`${window.location.origin}/`)) {
+        // This is an extra check to prevent open redirects.
+        throw new Error("Invalid return url. The return url needs to have the same origin as the current page.")
+    }
+    const ReturnUrl = fromQuery || `${window.location.origin}/`;
+
+    if (!!ReturnUrl) {
+        window.location.replace(ReturnUrl);
     }
 }
 
@@ -82,12 +103,12 @@ export function* signOut(): SagaIterator {
 
     try {
         yield put(actions.SignOutRequest());
-        yield call(userManager.signoutPopup, UserUtils.createArguments(null));
+        yield call([userManager, userManager.signoutPopup], UserUtils.createArguments(null));
         yield put(actions.SignOutSuccess());
     } catch (popupSignOutError) {
         console.log("Popup signout error: ", popupSignOutError);
         try {
-            yield call(userManager.signoutRedirect, UserUtils.createArguments(null));
+            yield call([userManager, userManager.signoutRedirect], UserUtils.createArguments(null));
         } catch (redirectSignOutError) {
             console.log("Redirect signout error: ", redirectSignOutError);
             yield put(actions.SignOutFailure(redirectSignOutError));
@@ -97,8 +118,7 @@ export function* signOut(): SagaIterator {
 export function* completeSignOut(url): SagaIterator {
     const userManager: UserManager = yield call(ensureUserManagerInitialized);
     try {
-        yield call(userManager.signoutCallback, url);
-        yield put(actions.SignOutSuccess());
+        yield call([userManager, userManager.signoutCallback], url);
     } catch (error) {
         console.log(`There was an error trying to log out '${error}'.`);
         yield put(actions.SignOutFailure(error));
@@ -106,9 +126,13 @@ export function* completeSignOut(url): SagaIterator {
 }
 
 function* watch(): SagaIterator {
+    yield takeLatest(actionTypes.INIT_USER_MANAGER, initUserManager);
     yield takeEvery(actionTypes.SIGN_IN.action, signIn);
     yield takeEvery(actionTypes.SIGN_OUT.action, signOut);
-    yield takeEvery(actionTypes.COMPLETE_SIGN_IN, completeSignIn);
-    yield takeEvery(actionTypes.COMPLETE_SIGN_OUT, completeSignOut);
+    yield takeEvery(actionTypes.SIGN_IN_CALLBACK, completeSignIn);
+    yield takeEvery(actionTypes.SIGN_OUT_CALLBACK, completeSignOut);
+    yield takeEvery(actionTypes.SIGN_IN.success, redirectToUrlFromQuery);
+    yield takeEvery(actionTypes.SIGN_OUT.success, redirectToUrlFromQuery);
+
 }
 export default [watch()];

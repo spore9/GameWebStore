@@ -14,31 +14,31 @@ export const getSignInStatus = createSelector(
   );
 
   export const getIsAuthenticated = createSelector(
-    (state: SecurityGlobalState) => state.isAuthenticated,
-    (value) => value,
+    (state: SecurityGlobalState) => state.security.user,
+    (value) => !!value,
   );
 
   export const getUserName = createSelector(
-    (state: SecurityGlobalState) => state.user?.profile?.name,
+    (state: SecurityGlobalState) => state.security.user?.profile?.name,
     (value) => value,
   );
 
   export const getAccessToken = createSelector(
-    (state: SecurityGlobalState) => state.user?.access_token,
+    (state: SecurityGlobalState) => state.security.user?.access_token,
     (value) => value,
   );
 
   export const getLoginMessage = createSelector(
-    (state: SecurityGlobalState) => state.login?.message,
+    (state: SecurityGlobalState) => state.securityComponents.login?.message,
     (value) => value,
   );
 
   export const getLogoutMessage = createSelector(
-    (state: SecurityGlobalState) => state.logout?.message,
+    (state: SecurityGlobalState) => state.securityComponents.logout?.message,
     (value) => value,
   );
 
   export const getIsLogoutReady = createSelector(
-    (state: SecurityGlobalState) => state.logout?.isReady,
+    (state: SecurityGlobalState) => state.securityComponents.logout?.isReady,
     (value) => value,
   );
